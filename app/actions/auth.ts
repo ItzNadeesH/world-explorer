@@ -1,6 +1,8 @@
 "use server";
 
 import { SignupFormSchema, FormState } from "@/validations/signup-validations";
+import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export async function signup(state: FormState, formData: FormData) {
@@ -14,10 +16,39 @@ export async function signup(state: FormState, formData: FormData) {
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
       values: { name, email, password },
+      errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  // Call the provider or db to create a user...
+  // Hash the user's password before storing it
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    // Check is email already exists
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (user) {
+      return {
+        values: { name, email, password },
+        errors: { email: ["Email already exists!"] },
+      };
+    }
+
+    // Insert the user into the database
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "An error occurred while creating your account.",
+    };
+  }
+
+  redirect("/login");
 }
