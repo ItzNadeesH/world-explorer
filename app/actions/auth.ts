@@ -1,6 +1,7 @@
 "use server";
 
 import { SignupFormSchema, FormState } from "@/validations/signup-validations";
+import { createSession, deleteSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -50,5 +51,39 @@ export async function signup(state: FormState, formData: FormData) {
     };
   }
 
+  redirect("/login");
+}
+
+export async function login(state: FormState, formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return {
+        message: "Incorrect email or password!",
+      };
+    }
+
+    const passwordMatched = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatched) {
+      return {
+        message: "Incorrect email or password!",
+      };
+    }
+
+    await createSession(user.id);
+  } catch (error) {
+    console.log(error);
+  }
+
+  redirect("/");
+}
+
+export async function logout() {
+  await deleteSession();
   redirect("/login");
 }

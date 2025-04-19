@@ -1,10 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useActionState } from "react";
+import { login } from "@/app/actions/auth";
 import Image from "next/image";
 import Link from "next/link";
 
 const Login = () => {
+  const [state, dispatch, isPending] = useActionState(login, undefined);
+
   return (
     <div className="flex min-h-screen -mt-10 flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <Image src="/logo.svg" alt="logo" width={64} height={64} className="mx-auto" />
@@ -18,7 +21,8 @@ const Login = () => {
       </div>
 
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-3" noValidate>
+        <p className="text-sm text-center text-red-700">{state?.message}</p>
+        <form action={dispatch} className="space-y-3" noValidate>
           <div>
             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
               Email
@@ -51,6 +55,7 @@ const Login = () => {
           <div className="mt-6">
             <button
               type="submit"
+              disabled={isPending}
               className="flex w-full justify-center rounded-md  bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-black/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:bg-black/80 disabled:cursor-default cursor-pointer"
             >
               Login
