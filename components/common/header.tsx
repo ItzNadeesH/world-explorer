@@ -9,10 +9,12 @@ const Header = () => {
   return (
     <div className="h-16">
       <div className="flex items-center justify-between w-full h-full px-5 border-b border-gray-300 max-w-7xl mx-auto">
-        <div className="font-semibold">World Explorer</div>
+        <div className="font-semibold">
+          <Link href="/">World Explorer</Link>
+        </div>
         <div className="flex items-center gap-4">
           <Link
-            href="favorites"
+            href="/favorites"
             className="flex h-10 w-10 items-center hover:bg-gray-100 rounded-full border border-gray-200 transition-all"
           >
             <Image
