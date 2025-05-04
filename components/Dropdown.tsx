@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type DropdownProps = {
   label: string;
@@ -11,9 +11,22 @@ type DropdownProps = {
 
 const ReusableDropdown: React.FC<DropdownProps> = ({ label, options, selected, onSelect }) => {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="relative w-[200px]">
+    <div className="relative w-[200px]" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
         type="button"
