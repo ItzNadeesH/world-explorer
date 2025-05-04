@@ -4,10 +4,24 @@ export type Country = {
   };
   cca3: string;
   region: string;
+  subregion?: string;
+  area?: number;
+  borders?: string[];
   flags: {
-    png: string;
+    png?: string;
+    svg?: string;
   };
-  population: string;
-  capital: string;
+  capital?: string[];
+  timezones?: string[];
+  population: number;
+  languages?: {
+    [key: string]: string; // e.g., "en": "English"
+  };
+  currencies?: {
+    [code: string]: {
+      name: string;
+      symbol: string;
+    };
+  };
   isFavorite: boolean;
 };
