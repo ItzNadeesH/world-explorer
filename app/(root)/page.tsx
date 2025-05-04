@@ -8,7 +8,6 @@ import Spinner from "@/components/Spinner";
 import Dropdown from "@/components/Dropdown";
 import { regions } from "@/constants/regions";
 import { languages } from "@/constants/languages";
-import { Trash2 } from "lucide-react";
 
 export default function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
