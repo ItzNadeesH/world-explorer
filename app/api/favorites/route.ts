@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     // Check if the country is already in the favorites list
     if (favorites.includes(code)) {
       // If it's in the favorites list, remove it
-      favorites = favorites.filter((fav) => fav !== code);
+      favorites = favorites.filter((fav: any) => fav !== code);
     } else {
       // If it's not in the favorites list, add it
       favorites.push(code);
