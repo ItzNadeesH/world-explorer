@@ -14,8 +14,6 @@ export default function CountryDetails() {
   const [country, setCountry] = useState<Country | null>(null);
   const [loading, setLoading] = useState(true);
 
-  console.log(country);
-
   useEffect(() => {
     fetchData();
   }, []);
