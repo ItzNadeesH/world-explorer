@@ -1,6 +1,7 @@
 export type Country = {
   name: {
     common: string;
+    official: string;
   };
   cca3: string;
   region: string;
@@ -23,5 +24,10 @@ export type Country = {
       symbol: string;
     };
   };
+  car: {
+    side: string;
+  };
+  independent: boolean;
+  startOfWeek: string;
   isFavorite: boolean;
 };
