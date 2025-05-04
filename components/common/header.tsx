@@ -56,10 +56,6 @@ const UserDropDown = () => {
         }`}
       >
         <div className="py-1">
-          <div className="block px-4 py-2 text-xs text-black border-b border-gray-100">
-            <p>Signed in as</p>
-            <p>nadeesh@gmail.com</p>
-          </div>
           <Link
             href="/settings"
             className="block px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100"
