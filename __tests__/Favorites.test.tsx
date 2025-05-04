@@ -2,7 +2,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import Favorites from "@/app/(root)/favorites/page";
 import { Country } from "@/types/country";
 import "@testing-library/jest-dom";
-import { act } from "react-dom/test-utils";
 
 // Mock the necessary components
 jest.mock("../components/Spinner", () => () => <div>Loading...</div>);
