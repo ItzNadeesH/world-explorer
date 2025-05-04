@@ -5,11 +5,25 @@ import Link from "next/link";
 import { useState } from "react";
 
 const CountryCard = ({ country }: { country: Country }) => {
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(country.isFavorite);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = async () => {
     country.isFavorite = !isFavorite;
     setIsFavorite(!isFavorite);
+
+    try {
+      await fetch("/api/favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code: country.cca3,
+        }),
+      });
+    } catch (error) {
+      console.error("Failed to update favorite:", error);
+    }
   };
   return (
     <div className="relative border border-gray-300 shadow-sm rounded-lg">
