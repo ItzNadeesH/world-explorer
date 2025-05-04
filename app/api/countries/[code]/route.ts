@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, { params }: { params: { code: string } }) {
-  const code = params.code.toUpperCase();
+export async function GET(req: Request, { params }: { params: Promise<{ code: string }> }) {
+  const { code } = await params;
   try {
     const res = await fetch(`https://restcountries.com/v3.1/alpha/${code}`);
     if (!res.ok) {
