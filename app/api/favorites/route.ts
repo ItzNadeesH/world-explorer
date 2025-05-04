@@ -10,13 +10,13 @@ export async function POST(req: Request) {
     // Retrieve session cookies to get the user ID
     const cookie = (await cookies()).get("session")?.value;
     if (!cookie) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return NextResponse.json([], { status: 401 });
     }
 
     // Assuming you have a function to decrypt the session
     const session = await decrypt(cookie);
     if (!session?.userId) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json([], { status: 404 });
     }
 
     const userId = session.userId.toString();
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json([], { status: 404 });
     }
 
     let favorites = user.favorites || [];
@@ -50,6 +50,6 @@ export async function POST(req: Request) {
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {
     console.error("Error updating favorite:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json([], { status: 500 });
   }
 }
