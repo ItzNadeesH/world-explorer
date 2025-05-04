@@ -26,11 +26,11 @@ const ReusableDropdown: React.FC<DropdownProps> = ({ label, options, selected, o
   }, []);
 
   return (
-    <div className="relative w-[200px]" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
         type="button"
-        className="grid w-full h-10 cursor-pointer grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
+        className="grid w-full h-10 cursor-pointer grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-black text-sm/6"
       >
         <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
           <span className="block truncate">{selected || label}</span>
@@ -49,7 +49,7 @@ const ReusableDropdown: React.FC<DropdownProps> = ({ label, options, selected, o
       </button>
 
       <ul
-        className={`absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm transition ease-out duration-100 transform ${
+        className={`absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-sm transition ease-out duration-100 transform ${
           open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
         }`}
       >

@@ -8,6 +8,7 @@ import Spinner from "@/components/Spinner";
 import Dropdown from "@/components/Dropdown";
 import { regions } from "@/constants/regions";
 import { languages } from "@/constants/languages";
+import { Trash2 } from "lucide-react";
 
 export default function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -59,32 +60,34 @@ export default function Home() {
         </div>
 
         {/* Search Bar */}
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-2">
           <Search setResult={setCountries} setLoading={setLoading} />
-          <Dropdown
-            label="Select Region"
-            options={regions}
-            selected={selectedRegion}
-            onSelect={(region) => setSelectedRegion(region)}
-          />
+          <div className="flex flex-col lg:flex-row items-center gap-2 w-full">
+            <Dropdown
+              label="Select Region"
+              options={regions}
+              selected={selectedRegion}
+              onSelect={(region) => setSelectedRegion(region)}
+            />
 
-          <Dropdown
-            label="Select Language"
-            options={languages}
-            selected={selectedLanguage}
-            onSelect={(language) => setSelectedLanguage(language)}
-          />
+            <Dropdown
+              label="Select Language"
+              options={languages}
+              selected={selectedLanguage}
+              onSelect={(language) => setSelectedLanguage(language)}
+            />
 
-          <button
-            onClick={() => {
-              setSelectedRegion(null);
-              setSelectedLanguage(null);
-              setFilteredCountries(countries);
-            }}
-            className="text-sm border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-md cursor-pointer"
-          >
-            Clear Filters
-          </button>
+            <button
+              onClick={() => {
+                setSelectedRegion(null);
+                setSelectedLanguage(null);
+                setFilteredCountries(countries);
+              }}
+              className="w-full text-sm border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-md cursor-pointer"
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
 
         {/* Countries Grid  */}
@@ -130,7 +133,7 @@ const Search = ({
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-1/2">
+    <form onSubmit={handleSearch} className="w-full">
       <div className="flex max-w-2xl border-2 mx-auto rounded-full px-2">
         <Image src="/logo.svg" alt="logo" width={24} height={24} className="mx-auto" />
 
