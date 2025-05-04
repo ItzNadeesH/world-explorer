@@ -5,10 +5,16 @@ import { Country } from "@/types/country";
 import Image from "next/image";
 import CountryCard from "@/components/CountryCard";
 import Spinner from "@/components/Spinner";
+import Dropdown from "@/components/Dropdown";
+import { regions } from "@/constants/regions";
+import { languages } from "@/constants/languages";
 
 export default function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -20,6 +26,25 @@ export default function Home() {
     setCountries(data);
     setLoading(false);
   };
+
+  useEffect(() => {
+    let filtered = countries;
+
+    if (selectedRegion) {
+      filtered = filtered.filter((country) => country.region === selectedRegion);
+    }
+
+    if (selectedLanguage) {
+      filtered = filtered.filter((country) => {
+        const langs = country.languages ? Object.values(country.languages) : [];
+        return langs.some((lang: string) =>
+          lang.toLowerCase().includes(selectedLanguage.toLowerCase())
+        );
+      });
+    }
+
+    setFilteredCountries(filtered);
+  }, [countries, selectedRegion, selectedLanguage]);
 
   return (
     <>
@@ -34,16 +59,44 @@ export default function Home() {
         </div>
 
         {/* Search Bar */}
-        <div>
+        <div className="flex justify-center items-center gap-2">
           <Search setResult={setCountries} setLoading={setLoading} />
+          <Dropdown
+            label="Select Region"
+            options={regions}
+            selected={selectedRegion}
+            onSelect={(region) => setSelectedRegion(region)}
+          />
+
+          <Dropdown
+            label="Select Language"
+            options={languages}
+            selected={selectedLanguage}
+            onSelect={(language) => setSelectedLanguage(language)}
+          />
+
+          <button
+            onClick={() => {
+              setSelectedRegion(null);
+              setSelectedLanguage(null);
+              setFilteredCountries(countries);
+            }}
+            className="text-sm border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-md cursor-pointer"
+          >
+            Clear Filters
+          </button>
         </div>
 
         {/* Countries Grid  */}
         {loading ? (
           <Spinner />
+        ) : filteredCountries.length === 0 ? (
+          <div className="mt-10 col-span-full text-center text-gray-600">
+            No countries found based on your filter criteria.
+          </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {countries.map((country, index) => (
+            {filteredCountries.map((country, index) => (
               <CountryCard key={index} country={country} />
             ))}
           </div>
@@ -65,7 +118,11 @@ const Search = ({
   const handleSearch = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch(`api/countries/search?q=${query}`);
+
+    const res = query
+      ? await fetch(`api/countries/search?q=${query}`)
+      : await fetch("api/countries");
+
     const data = await res.json();
 
     setResult(data);
@@ -73,7 +130,7 @@ const Search = ({
   };
 
   return (
-    <form onSubmit={handleSearch}>
+    <form onSubmit={handleSearch} className="w-1/2">
       <div className="flex max-w-2xl border-2 mx-auto rounded-full px-2">
         <Image src="/logo.svg" alt="logo" width={24} height={24} className="mx-auto" />
 
